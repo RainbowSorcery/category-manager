@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyra.mapper.ProductMapper">
+
+    <select id="findProductAndCategoryName" resultType="com.lyra.entity.Product">
+        SELECT pro.id, pro.product_name , pro.description, pro.price , pro.keyword, pro.product_img , pc.name as category_name
+        FROM product pro, pms_category pc  WHERE  pc.cat_id  = pro .category_id
+    </select>
+    <select id="findProductAndCateegory" resultType="com.lyra.entity.Product">
+        SELECT pro.id, pro.product_name , pro.description , pro.price, pro.keyword, pro.product_img , pc.name as category_name,  pc.cat_id as category_id
+        FROM product pro, pms_category pc WHERE  pc.cat_id  = pro.category_id AND pro.id = #{id}
+    </select>
+    <select id="findProductByName" resultType="com.lyra.entity.Product">
+        SELECT pro.id, pro.product_name , pro.description , pro.price, pro.keyword, pro.product_img , pc.name as category_name,  pc.cat_id as category_id
+        FROM product pro, pms_category pc WHERE  pc.cat_id  = pro.category_id AND pro.product_name = #{name}
+    </select>
+    <select id="findPriceByProduct" resultType="com.lyra.entity.Product">
+        SELECT pro.id, pro.product_name , pro.description , pro.price, pro.keyword, pro.product_img , pc.name as category_name,  pc.cat_id as category_id
+        FROM product pro, pms_category pc WHERE  pc.cat_id  = pro.category_id AND pro.price &gt; #{beginPrice} AND pro.price &lt; #{endPrice}
+    </select>
+    <select id="findProductByCondtion" resultType="com.lyra.entity.Product">
+        SELECT pro.id, pro.product_name , pro.description , pro.price, pro.keyword, pro.product_img , pc.name as category_name,  pc.cat_id as category_id
+        FROM product pro, pms_category pc WHERE  pc.cat_id  = pro.category_id
+        <if test="beginPrice != null and endPrice != null" >
+            AND pro.price &gt; #{beginPrice} AND pro.price &lt; #{endPrice}
+        </if>
+        <if test="name != null" >
+            and product_name like '%${name}%'
+        </if>
+    </select>
+</mapper>
